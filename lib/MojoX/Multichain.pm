@@ -56,6 +56,7 @@ my @methods = qw/
   prioritisetransaction
   submitblock
   getpermissions
+  listpermissions
 
   addnode
   clearbanned
