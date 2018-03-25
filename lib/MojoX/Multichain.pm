@@ -4,6 +4,7 @@ use Mojo::Base -base;
 use Mojo::UserAgent;
 use Mojo::JSON qw/encode_json/;
 use Mojo::Util qw/monkey_patch decode/;
+use Data::Dumper;
 
 use Carp qw/croak/;
 
@@ -30,106 +31,150 @@ my @methods = qw/
   getblockchaininfo
   getblockcount
   getblockhash
-  getblockheader
   getchaintips
   getdifficulty
-  getmempoolancestors
-  getmempooldescendants
-  getmempoolentry
   getmempoolinfo
   getrawmempool
   gettxout
-  gettxoutproof
   gettxoutsetinfo
+  listassets
+  listblocks
+  listpermissions
+  liststreams
+  listupgrades
   verifychain
-  verifytxoutproof
 
+  clearmempool
+  getblockchainparams
   getinfo
+  getruntimeparams
+  pause
+  resume
+  setlastblock
+  setruntimeparam
   stop
 
   generate
-  generatetoaddress
+  gethashespersec
+  setgenerate
 
   getblocktemplate
   getmininginfo
   getnetworkhashps
   prioritisetransaction
   submitblock
-  getpermissions
-  listpermissions
 
   addnode
-  clearbanned
-  disconnectnode
   getaddednodeinfo
   getconnectioncount
   getnettotals
   getnetworkinfo
   getpeerinfo
-  listbanned
   ping
-  setban
 
+  appendrawchange
+  appendrawdata
+  appendrawtransaction
   createrawtransaction
   decoderawtransaction
   decodescript
-  fundrawtransaction
   getrawtransaction
   sendrawtransaction
   signrawtransaction
 
+  createkeypairs
   createmultisig
-  createwitnessaddress
   estimatefee
   estimatepriority
-  estimatesmartfee
-  estimatesmartpriority
-  signmessagewithprivkey
   validateaddress
   verifymessage
 
-  abandontransaction
   addmultisigaddress
-  addwitnessaddress
+  appendrawexchange
+  approvefrom
   backupwallet
+  combineunspent
+  completerawexchange
+  create
+  createfrom
+  createrawexchange
+  createrawsendfrom
+  decoderawexchange
+  disablerawtransaction
   dumpprivkey
   dumpwallet
   encryptwallet
   getaccount
   getaccountaddress
+  getaddressbalances
+  getaddresses
   getaddressesbyaccount
+  getaddresstransaction
+  getassetbalances
+  getassettransaction
   getbalance
   getnewaddress
-  getaddresses
   getrawchangeaddress
   getreceivedbyaccount
   getreceivedbyaddress
+  getstreamitem
+  gettotalbalances
   gettransaction
+  gettxoutdata
   getunconfirmedbalance
   getwalletinfo
+  getwallettransaction
+  grant
+  grantfrom
+  grantwithdata
+  grantwithdatafrom
   importaddress
   importprivkey
-  importprunedfunds
-  importpubkey
   importwallet
+  issue
+  issuefrom
+  issuemore
+  issuemorefrom
   keypoolrefill
   listaccounts
+  listaddresses
   listaddressgroupings
+  listassettransactions
   listlockunspent
   listreceivedbyaccount
   listreceivedbyaddress
   listsinceblock
+  liststreamblockitems
+  liststreamitems
+  liststreamkeyitems
+  liststreamkeys
+  liststreampublisheritems
+  liststreampublishers
   listtransactions
   listunspent
+  listwallettransactions
   lockunspent
   move
-  removeprunedfunds
+  preparelockunspent
+  preparelockunspentfrom
+  publish
+  publishfrom
+  resendwallettransactions
+  revoke
+  revokefrom
+  send
+  sendasset
+  sendassetfrom
   sendfrom
+  sendfromaccount
   sendmany
-  sendtoaddress
+  sendwithdata
+  sendwithdatafrom
   setaccount
   settxfee
   signmessage
+  subscribe
+  unsubscribe
 /;
 
 for my $method ( @methods ) {
@@ -168,6 +213,7 @@ sub _call {
   }
 
   else {
+    print Dumper($body);
     my $tx = $self->ua->post( $self->url, $headers, $body );
 
     return $tx->res->json if $tx->success;
